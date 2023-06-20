@@ -1,0 +1,77 @@
+//3. Поле first – целое положительное число, числитель; поле second – целое положительное число, знаменатель.
+
+#include <iostream>
+#include <typeinfo>
+
+using namespace std;
+
+class Pair
+{
+    unsigned int first = 0;
+    unsigned int  second = 0;
+   public: 
+    void init(int f, int s);//- метод инициализации init; метод должен контролировать значения аргументов на корректность;
+    void read();//ввод с клавиатуры read;
+    void display();//вывод на экран display.
+    unsigned int ipart();//Реализовать метод ipart() – выделение целой части дроби first/second. Метод должен проверять неравенство знаменателя нулю.
+};
+
+void Pair::init(int f, int s)
+{
+    if (f>=0, s>=0)
+    {
+        first = f;
+        second = s;
+    }
+    else
+    {
+        cout << "Invalid data, only INTEGER, POSITIVE values are accepted. Repeat the input.\n";
+        first = 1;
+        second = 1;
+        read();
+    }
+}
+
+void Pair::read()
+{
+    float f;
+    float s;
+    cout << "First: ";
+    cin >> f;
+    cout << "Second: ";
+    cin >> s;
+    Pair::init(f, s);
+}
+
+void Pair::display()
+{
+   cout << "\nfirst = " << first << "\nsecond = " << second << "\ninteger part = " << Pair::ipart() << "\n";
+}
+
+unsigned int Pair::ipart()
+{
+    if (second == 0) {
+        cout << "Denominator cannot be 0\n";
+        return (0);
+    }
+    return (first/second);
+}
+
+Pair make_pair(int f, int s)
+{
+    Pair pair;
+    pair.init(f, s);
+    return pair;
+}
+
+int main()
+{
+    Pair tests[3], test = make_pair(16, 5);
+    for (int i = 0; i < 3; i++)
+    {
+        tests[i].read();
+        tests[i].display();
+    }
+    test.display();
+    return 0;
+}
