@@ -1,0 +1,188 @@
+
+//Во всех заданиях необходимо реализовать конструктор инициализации (один или несколько),
+//конструктор копирования
+//и конструктор без аргументов.
+
+#include <iostream>
+#include <windows.h>
+#include <string>
+using namespace std;
+int iWidth = GetSystemMetrics(SM_CXSCREEN);  // разрешение экрана по горизонтали
+int iHeight = GetSystemMetrics(SM_CYSCREEN); // разрешение экрана по вертикали
+class ModelWindow {
+    string title, color;
+    int x, y, width, height;
+    bool visible, frame;
+public:
+    ModelWindow(); //конструктор без аргументов
+    ModelWindow(string title, int x, int y, int width, int height, string color, bool visible, bool frame); //конструктор инициализации и проверки
+    ModelWindow(const ModelWindow& x);//конструктор копирования
+
+    void read(); // метод ввода значений для полей
+    void display(); // метод вывода значений полей на экран
+
+    void Move(int delx, int dely);
+    void Resize(int w, int h);
+    void ChangeColor(string color);
+    void ChangeVis();
+    void ChangeFr();
+};
+ModelWindow::ModelWindow() {
+    title = "";
+    x = y = 0;
+    width = 1000;
+    height = 500;
+    color = "WHITE";
+    visible = 0;
+    frame = 0;
+};
+ModelWindow::ModelWindow(string title, int x, int y, int width, int height, string color, bool visable, bool frame) {
+   this->title = title;
+    if (x < 0 or x > iWidth) {
+      std:: cout << "X exceeds screen's size! Default values were setted!" << endl;
+        this->x = 0;
+    }
+    else {
+        this->x = x;
+    }
+
+    if (y < 0 or y > iHeight) {
+        cout << "Y exceeds screen's size! Default values were setted!" << endl;
+        this->y = 0;
+    }
+    else {
+        this->y = y;
+    }
+
+    if (width > iWidth or height > iHeight or width == 0 or height == 0) {
+        cout << "Width or height exceeds screen's size! Default values were setted!\n" << endl;
+        this->width = 1000;
+        this->height = 500;
+    }
+    else {
+        this->width = width;
+        this->height = height;
+    }
+    this->color = color;
+    this->visible = visible;
+    this->frame = frame;
+}
+ModelWindow::ModelWindow(const ModelWindow& a) {
+    this->title = a.title;
+    this->x = a.x;
+    this->y = a.y;
+    this->width = a.width;
+    this->height = a.height;
+    this->color = a.color;
+    this->visible = a.visible;
+    this->frame = a.frame;
+}
+
+void ModelWindow::read() {
+    string title, color;
+    int x, y, width, height;
+    bool visible, frame;
+
+    cout << endl << "Title of window: ";
+    cin >> title;
+    cout << "Enter x, y of the upper-left corner: ";
+    cin >> x >> y;
+    cout << "Enter width and height if frame: ";
+    cin >> width >> height;
+    cout << "Enter color: ";
+    cin >> color;
+    cout << "Framed?  (true / false): ";
+    cin >> frame;
+    cout << "Visible? (true / false): ";
+    cin >> visible;
+    this->title = title;
+    if (x < 0 or x > iWidth) {
+        cout << "X exceeds screen's size! Default values were setted!" << endl;
+    }
+    else {
+        this->x = x;
+    }
+
+    if (y < 0 or y > iHeight) {
+        cout << "Y exceeds screen's size! Default values were setted!" << endl;
+    }
+    else {
+        this->y = y;
+    }
+
+    if (width > iWidth or height > iHeight or width == 0 or height == 0) {
+        cout << "Width or height exceeds screen's size! Default values were setted!\n" << endl;
+    }
+    else {
+        this->width = width;
+        this->height = height;
+    }
+    this->color = color;
+    this->visible = visible;
+    this->frame = frame;
+
+}
+
+void ModelWindow::display() {
+    cout << endl << "Title: " << this->title << endl << "Coordinates: " << this->x << " " << this->y << endl << "Size: " << this->width << "x" << this->height << endl;
+    cout << "Color: " << this->color << endl << "Visible: " << this->visible << endl << "Framed: " << this->frame << endl;
+}
+void ModelWindow::Move(int delx, int dely) {
+
+    this->x += delx;
+    this->y += dely;
+
+    if (this->x + delx < 0) {
+        this->x = 0;
+    }
+    if (this->y + dely < 0) {
+        this->y = 0;
+    }
+    if (this->x + delx + this->width > iWidth) {
+        this->x = iWidth - this->width;
+    }
+    if (this->y + dely + this->height > iHeight) {
+        this->y = iHeight - this->height;
+    }
+}
+void ModelWindow::Resize(int w, int h) {
+    this->width = w;
+    this->height = h;
+    if (this->width > iWidth) {
+        this->width = iWidth;
+    }
+    if (this->height > iHeight) {
+        this->height = iHeight;
+    }
+}
+void ModelWindow::ChangeColor(string color) {
+    this->color = color;
+}
+void ModelWindow::ChangeVis() {
+    this->visible = !this->visible;
+}
+void ModelWindow::ChangeFr() {
+    this->frame = !this->frame;
+}
+
+int main()
+{
+     ModelWindow zero("zero", -10, 456, 300, 100, "red", 1, 0), windows[2];
+    cout << "Massive of Windows:\n";
+    for (int i = 0; i < 2; i++) {
+        windows[i].read();
+    }
+    ModelWindow third(windows[1]);
+    zero.Move(1000, 250);
+    zero.ChangeVis();
+
+    windows[1].ChangeColor("Blue");
+    windows[1].ChangeFr();
+    windows[1].Resize(300, 760);
+    zero.display();
+    windows[0].display();
+    windows[1].display();
+    third.display();
+    
+    return 0;
+}
