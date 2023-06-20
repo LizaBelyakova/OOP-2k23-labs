@@ -110,7 +110,7 @@ void ModelWindow::read() {
         this->y = y;
     }
 
-    if (width > iWidth or height > iHeight or width == 0 or height == 0) {
+    if (width > iWidth or height > iHeight or width <= 0 or height <= 0) {
         cout << "Width or height exceeds screen's size! Default values were setted!\n" << endl;
     }
     else {
